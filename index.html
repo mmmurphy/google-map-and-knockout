@@ -4,17 +4,13 @@
      <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title></title>
+     <meta name="description" content="Udacity Front-End Web Devolper project.  This project is an example of using an MV* framework, Knockout.js to display and interact with a Google Map.">
+     <title>Local Map Example</title>
 
      <!-- Above the fold CSS -->
      <style>
           #map {
                height: 100%;
-          }
-          html, body {
-               height: 100%;
-               margin: 0;
-               padding: 0;
           }
           #myMapWindow {
                height: 100%;
@@ -22,22 +18,66 @@
                margin: 1em;
                padding: 1em;
           }
+          html, body {
+               height: 100%;
+               margin: 1em;
+               padding: 1em;
+          }
      </style>
-     <link rel="stylesheet" href="css/bootstrap.min.css">
+<!--     <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
      <!-- <link rel="stylesheet" media="screen and (min-width:500px)" href="over500.css"> -->
      <!-- <link rel="stylesheet" media="print" href="print.css"> -->
 </head>
-<body>
+<body id="body">
      <div>
-          <h1 id='mainPageHeader'></h1>
-          <h4 id='subPageHeader'></h4>
+          <h1 id="mainPageHeader"></h1>
+          <h4 id="subPageHeader"></h4>
      </div>
-     <div id='myMapWindow'>
-          <div id='map'>
+     <div id="filterControls">
+     </div>
+     <div id="myMapWindow">
+          <div id="map">
           </div>
      </div>
+<!--     <script async defer>
+          //load async/defer scripts in order
+          // inspired by posts: https://stackoverflow.com/questions/35858274/how-to-import-the-external-js-with-callback-function
+          //                   https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onload_dom
+          // add scripts to JSON array
+          var arrDeferredScripts = [{"id": "jquery", "type": "", "src": "js/jquery-3.2.1.slim.min.js"},
+                                   {"id": "bootstrap", "type": "", "src": "js/bootstrap.min.js"},
+                                   {"id": "knockout.js", "type": "", "src": "js/knockout-3.5.0beta.js"},
+                                   {"id": "custom", "type": "", "src": "js/index-mv-star.js"},
+                                   {"id": "googlemaps", "type": "", "src": "https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"}
+                              ];
+          var loopStop = arrDeferredScripts.length;
+          var bodyID = document.getElementById("body");
+
+          // loop through scripts and load
+          for (loop = 0; loop < loopStop; loop++) {
+               console.log("loading script: " + arrDeferredScripts[loop].src);
+               var loadScript = document.createElement("script");
+               loadScript.id = arrDeferredScripts[loop].id;
+               loadScript.src = arrDeferredScripts[loop].src;
+               var tempString = arrDeferredScripts[loop].id + " is loaded";
+               bodyID.append(loadScript);
+               loadScript.onload = loadedScript(tempString);
+
+          }
+
+          function loadedScript(string) {
+               console.log(string);
+          }
+     </script>
+-->
      <!-- JQuery required for bootstrap -->
-     <script src="js/jquery-3.2.1.slim.min.js"></script>
+     <script src="js/jquery-3.2.1.slim.min.js" onload=""></script>
+     <script async=false>
+          $(document).ready( function() {
+               console.log("jquery loaded");
+          })
+     </script>
      <script src="js/bootstrap.min.js"></script>
      <!-- scripts for Knockout.js and MV* design  -->
      <script src="js/knockout-3.5.0beta.js"></script>

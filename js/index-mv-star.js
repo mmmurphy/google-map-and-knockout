@@ -1,30 +1,28 @@
+var map;
 
 /* **********************************************
 *  Model
 *     variables and constants go here
 * ***********************************************/
 var data = {
+     // data for individual markers
+     //     {"title": "", "position": "{"lat": "", "lng": ""}},
      mapMarkersJSON: '[' +
-          '{"title": "Pandoras Pies", "position": {"lat": 36.1014897, "lng": -79.50681}}, ' +
-          '{"title": "The Root", "position": {"lat": 36.1007668, "lng": -79.5073888}}, ' +
-          '{"title": "Elon Fountain", "position": {"lat": 36.1031529, "lng": -79.5049359}}, ' +
-          '{"title": "markerCoffee", "position": {"lat": 36.104145, "lng": -79.5059}}, ' +
-          '{"title": "Steve Wosniak", "position": {"lat": 36.102726, "lng": -79.504673}}]',
-          //     {"title": "", "position": "{"lat": "", "lng": ""}},
+          '{"title": "Pandoras Pies", "position": {"lat": 36.1014897, "lng": -79.50681}, "type": "Resturaunt"}, ' +
+          '{"title": "The Root", "position": {"lat": 36.1007668, "lng": -79.5073888}, "type": "Resturaunt"}, ' +
+          '{"title": "Elon Fountain", "position": {"lat": 36.1031529, "lng": -79.5049359}, "type": "Landmark"}, ' +
+          '{"title": "markerCoffee", "position": {"lat": 36.104145, "lng": -79.5059}, "type": "Resturaunt"}, ' +
+          '{"title": "Steve Wosniak", "position": {"lat": 36.102726, "lng": -79.504673}, "type": "Event"}]',
 
-
+     // Map variables for centering and the Zoom level
      mapCenter: {lat: 36.1013906, lng: -79.5067275},
      mapDefaultZoom: 16,
 
-
-//     mappedMarkers: ko.utils.arrayMap(this.mapMarkersKO, function(mapMarker) {
-//          console.log('data.mappedMarkers');
-//          return new Marker(mapMarker);
-//     }),
-
+     activeMarkers: [],
+     // Header title text
      pageHeader: {
-          main: 'Elm Street',
-          sub: 'Greensboro, NC'
+          main: 'Elon, NC 27244',
+          sub: ''
      }
 
 };
@@ -34,9 +32,20 @@ var data = {
 *     updates to html go here
 * ***********************************************/
 var view = {
+     // update text for the page Header.
+     //    main and sub input variables are text strings
      header: function(main, sub) {
           document.getElementById('mainPageHeader').innerText = main;
           document.getElementById('subPageHeader').innerText = sub;
+     },
+
+     displayFilterControls: function() {
+          document.getElementById('filterControls').innerHTML = '' +
+          '<input onclick="controller.init();" type=button value="Display All Markers">' +
+          '<input onclick="controller.init();" type=button value="Display Resturaunts">' +
+          '<input onclick="controller.init();" type=button value="Display Event Areas">' +
+          '<input onclick="controller.init();" type=button value="Display Landmarks">' +
+          '<input onclick="controller.init();" type=button value="Hide Markers">'
      }
 };
 
@@ -44,8 +53,8 @@ var view = {
 *  controller
 *     logic operations go here
 * ***********************************************/
-
 var controller = {
+     // init is executed by the callback for the google maps API URL in the HTML file
      init: function() {
           // display page header information
           view.header(data.pageHeader.main, data.pageHeader.sub);
@@ -57,54 +66,54 @@ var controller = {
           });
 
           // add markers to map
-          this.displayMarkers(map, data.mapMarkersJSON);
+          this.initMarkers(map, data.mapMarkersJSON, "All");
+
+          // add filter displayButtons
+          view.displayFilterControls();
+
+          this.filterMarkers("Resturaunt")
      },
 
-     displayMarkers: function(mapRef, jsonMarkers) {
-          console.log(jsonMarkers);
+     //initMarkers parses the jsonMarkers string and creates each marker
+     initMarkers: function(mapRef, jsonMarkers, filter) {
+//          console.log(jsonMarkers);
           var arrMarkers = ko.utils.parseJson(jsonMarkers);
-          console.log ('title 1 = ' + arrMarkers[0].title);
+//          console.log ('title 1 = ' + arrMarkers[0].title);
           var loopStop = arrMarkers.length;
-          console.log('lat = ' + arrMarkers[0].position);
+//          console.log('lat = ' + arrMarkers[0].position);
+          var visible = true;
 
+          // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
-               console.log('position for marker ' + loop + ' is :  ' + arrMarkers[loop].position);
-
+               console.log('position for marker ' + loop + ' is :  ' + arrMarkers[loop].position.lat);
+               //add marker object to activeMarkers array
                this.marker = new google.maps.Marker({
                     position: arrMarkers[loop].position,
                     map: mapRef,
-                    title: arrMarkers[loop].title
+                    title: arrMarkers[loop].title,
+                    visible:  visible
                });
+               // add marker to marker object array
+               data.activeMarkers.push(this.marker);
+          }
+     },
+     // filter Markers from display using the marker.visible property
+     filterMarkers: function(filter) {
+          var loopStop = data.activeMarkers.length;
+          var arrMarkers = ko.utils.parseJson(data.mapMarkersJSON);
+          for (var loop = 0; loop < loopStop; loop++) {
+               // set visible to true if marker.type matches filter
+               if (arrMarkers[loop].type == filter || filter == "All") {
+                    data.activeMarkers[loop].visible = true;
+               } else {
+                    data.activeMarkers[loop].visible = false;
+               }
+               //activeMarkers[loop].setMap(filter);
           }
      },
 
-     mapMarker: function (title, position) {
-          this.title = ko.observable();
-          this.position = ko.observable();
+
+     hideMarkers: function() {
+          filterMarkers(null);
      }
-
-
 };
-
-/* ~~~~~  HTML Script
-var map;
-function initMap() {
-     var markerPandorasPies = {lat: 36.1014897, lng: -79.50681};
-     var markerTheRoot = {lat: 36.1007668, lng: -79.5073888};
-     var markerElonFountain = {lat: 36.0823893, lng: -79.5224609};
-     var markerCoffee = {lat: 36.1051821, lng: -79.5051737};
-     var markerSteveWosniak = {lat: 36.1038291, lng: -79.5082237};
-     var mapCenter = {lat: 36.1013906, lng: -79.5067275};
-     var mapDefaultZoom = 16;
-     map = new google.maps.Map(document.getElementById('map'), {
-          center: mapCenter,
-          zoom: mapDefaultZoom
-     });
-     var marker = new google.maps.Marker({
-          position: markerSteveWosniak,
-          map: map,
-          title: 'First Marker!',
-          draggable: true
-     });
-}
-*/
