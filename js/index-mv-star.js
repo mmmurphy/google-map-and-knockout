@@ -11,21 +11,34 @@ var data = {
      mapMarkersJSON: '[' +
           '{"title": "Pandoras Pies", "position": {"lat": 36.1014897, "lng": -79.50681}, "type": "Resturaunt"}, ' +
           '{"title": "The Root", "position": {"lat": 36.1007668, "lng": -79.5073888}, "type": "Resturaunt"}, ' +
-          '{"title": "Fonville Fountain", "position": {"lat": 36.1022904, "lng": -79.5049627}, "type": "Landmark"}, ' +
-          '{"title": "markerCoffee", "position": {"lat": 36.104145, "lng": -79.5059}, "type": "Resturaunt"}, ' +
-          '{"title": "Steve Wosniak", "position": {"lat": 36.102726, "lng": -79.504673}, "type": "Event"}]',
+          '{"title": "Fonville Fountain", "position": {"lat": 36.10201, "lng": -79.504}, "type": "Landmark"}, ' +
+          '{"title": "Irazu Coffee", "position": {"lat": 36.10521, "lng": -79.505}, "type": "Resturaunt"}, ' +
+          '{"title": "Steve Wosniak", "position": {"lat": 36.1038, "lng": -79.506}, "type": "Event"}]',
 
      // Map variables for centering and the Zoom level
      mapCenter: {lat: 36.1013906, lng: -79.5067275},
      mapDefaultZoom: 16,
 
+     //used to store map marker objects
      activeMarkers: [],
+
+     // used to store an array of marker titles only.  This set will be used for the marker drobdown filter
+     activeMarkerTitles: ko.observableArray(['-- Or Select a Place']),
+
      // Header title text
      pageHeader: {
           main: 'Elon, NC 27244',
           sub: ''
-     }
+     },
 
+     // string of HTML code to display filter buttons and dropdown
+     filterButtons: '<input onclick="controller.filterMarkers(\'All\');" type="button" value="Display All Markers">' +
+          '<input onclick="controller.filterMarkers(\'Resturaunt\');" type="button" value="Display Resturaunts">' +
+          '<input onclick="controller.filterMarkers(\'Event\');" type="button" value="Display Event Areas">' +
+          '<input onclick="controller.filterMarkers(\'Landmark\');" type="button" value="Display Landmarks">' +
+          '<input onclick="controller.filterMarkers();" type="button" value="Hide Markers">' +
+          '<select data-bind="options: data.activeMarkerTitles"></select>'
+//          '<select><option value="All">-- Or Select a Place --</option></select>'
 };
 
 /* **********************************************
@@ -40,13 +53,9 @@ var view = {
           document.getElementById('subPageHeader').innerText = sub;
      },
 
-     displayFilterControls: function() {
-          document.getElementById('floating-panel').innerHTML = '' +
-          '<input onclick="controller.filterMarkers(\'All\');" type="button" value="Display All Markers">' +
-          '<input onclick="controller.filterMarkers(\'Resturaunt\');" type="button" value="Display Resturaunts">' +
-          '<input onclick="controller.filterMarkers(\'Event\');" type="button" value="Display Event Areas">' +
-          '<input onclick="controller.filterMarkers(\'Landmark\');" type="button" value="Display Landmarks">' +
-          '<input onclick="controller.filterMarkers();" type="button" value="Hide Markers">'
+     displayFilterControls: function(filterHTML) {
+          document.getElementById('floating-panel').innerHTML = filterHTML;
+
      }
 };
 
@@ -57,6 +66,8 @@ var view = {
 var controller = {
      // init is executed by the callback for the google maps API URL in the HTML file
      init: function() {
+          var markerTitles = [];
+
           // display page header information
           view.header(data.pageHeader.main, data.pageHeader.sub);
 
@@ -71,7 +82,7 @@ var controller = {
           this.initMarkers(data.map, data.mapMarkersJSON);
 
           // add filter displayButtons
-          view.displayFilterControls();
+          view.displayFilterControls(data.filterButtons);
      },
 
      //initMarkers parses the jsonMarkers string and creates each marker
@@ -94,6 +105,7 @@ var controller = {
                });
                // add marker to marker object array
                data.activeMarkers.push(this.marker);
+               data.activeMarkerTitles.push(arrMarkers[loop].title);
           }
      },
 

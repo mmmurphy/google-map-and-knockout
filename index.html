@@ -23,13 +23,13 @@
             top: 3em;
             left: 25%;
             z-index: 5;
-            background-color: #fff;
+            background-color: #000;
             padding: 5px;
             border: 1px solid #999;
             text-align: center;
             font-family: 'Roboto','sans-serif';
             line-height: 20px;
-            max-width: 55%;
+            max-width: 44%;
           }
           html, body {
                height: 100%;
@@ -46,6 +46,7 @@
      <div>
           <h1 id="mainPageHeader"></h1>
           <h4 id="subPageHeader"></h4>
+          <h4 id="loadError"></h4>
      </div>
      <div id="myMapWindow">
           <div id="floating-panel">
@@ -53,23 +54,18 @@
           <div id="map">
           </div>
      </div>
-<     <!-- JQuery required for bootstrap -->
-     <script src="js/jquery-3.2.1.slim.min.js" onload=""></script>
-     <script async=false>
-          $(document).ready( function() {
-               console.log("jquery loaded");
-          })
+     <script>
+          function errorLoading(inputString) {
+               document.getElementById('loadError').innerText = 'ERROR:  ' + inputString + ' did not load!';
+          }
      </script>
-     <script src="js/bootstrap.min.js"></script>
      <!-- scripts for Knockout.js and MV* design  -->
-     <script src="js/knockout-3.5.0beta.js"></script>
-     <script src="js/index-mv-star.js"></script>
+     <script src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
+     <script async src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
      <!-- script required for loading google maps API -->
      <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init">
-     </script>
-     <script defer>
-          controller.filterMarkers('Landmark');
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"
+          onerror="errorLoading('Google Maps API onerror')" onabort="errorLoading('Google Maps API abort')">
      </script>
 </body>
 </html>
