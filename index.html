@@ -11,6 +11,7 @@
      <style>
           #map {
                height: 100%;
+               width: 100%;
           }
           #myMapWindow {
                height: 100%;
@@ -19,7 +20,7 @@
                padding: 1em;
           }
           #floating-panel {
-            position: relative;
+            position: fixed;
             top: 3em;
             left: 25%;
             z-index: 5;
@@ -31,10 +32,50 @@
             line-height: 20px;
             max-width: 44%;
           }
+          .sidenav {
+              height: 100%;
+              max-width: 175px;
+              position: fixed;
+              z-index: 1;
+              top: 0;
+              left: 0;
+              background-color: #111;
+              overflow-x: hidden;
+              transition: 0.5s;
+              padding-top: 60px;
+          }
+
+          .sidenav a {
+              padding: 8px 8px 8px 32px;
+              text-decoration: none;
+              font-size: 25px;
+              color: #818181;
+              display: block;
+              transition: 0.3s;
+          }
+
+          .sidenav a:hover {
+              color: #f1f1f1;
+          }
+
+          .sidenav .closebtn {
+              position: absolute;
+              top: 0;
+              right: 25px;
+              font-size: 36px;
+              margin-left: 50px;
+          }
+          input, select {
+               width: 170px;
+          }
           html, body {
                height: 100%;
                margin: 1em;
                padding: 1em;
+          }
+          @media screen and (max-height: 450px) {
+            .sidenav {padding-top: 15px;}
+            .sidenav a {font-size: 18px;}
           }
      </style>
 <!--     <link rel="stylesheet" href="css/bootstrap.min.css"> -->
@@ -43,17 +84,28 @@
      <!-- <link rel="stylesheet" media="print" href="print.css"> -->
 </head>
 <body id="body">
+     <div id="mySidenav" class="sidenav">
+
+</div>
      <div>
-          <h1 id="mainPageHeader"></h1>
+          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; <h1 id="mainPageHeader"></h1></span>
           <h4 id="subPageHeader"></h4>
           <h4 id="loadError"></h4>
      </div>
      <div id="myMapWindow">
-          <div id="floating-panel">
-          </div>
           <div id="map">
           </div>
      </div>
+     <script>
+          //control side navigation menu
+          function openNav() {
+               document.getElementById("mySidenav").style.width = "250px";
+          }
+
+          function closeNav() {
+               document.getElementById("mySidenav").style.width = "0";
+          }
+     </script>
      <script>
           function errorLoading(inputString) {
                document.getElementById('loadError').innerText = 'ERROR:  ' + inputString + ' did not load!';
@@ -61,7 +113,11 @@
      </script>
      <!-- scripts for Knockout.js and MV* design  -->
      <script src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
+     <script src="model-views/mv-index.js" onerror="error loading('model-views/mv-index.js')"></script>
      <script async src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
+     <script>
+
+     </script>
      <!-- script required for loading google maps API -->
      <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"
