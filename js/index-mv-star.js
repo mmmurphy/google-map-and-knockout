@@ -8,6 +8,8 @@ var controller = {
           // display page header information
           view.header(data.pageHeader.main, data.pageHeader.sub);
 
+          closeNav();
+
           // display map area
           data.map = new google.maps.Map(document.getElementById('map'), {
                          center: data.mapCenter,
@@ -34,16 +36,18 @@ var controller = {
           );
      },
 
-     //initMarkers parses the jsonMarkers string and creates each marker
+     //initMarkers parses the jsonMarkers string and creates each marker object
      initMarkers: function(mapRef, jsonMarkers) {
           // parse marker string to JSON format using Knockout API
           var arrMarkers = ko.utils.parseJson(jsonMarkers);
           var loopStop = arrMarkers.length;
 
+          //clear markers of data before adding to arrays
           data.activeMarkers = [];
+          data.visibleMarkerList = [];
+
           // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
-//               console.log('position for marker ' + loop + ' is :  ' + arrMarkers[loop].position.lat);
                //add marker object to activeMarkers array
                this.marker = new google.maps.Marker({
                     position: arrMarkers[loop].position,
@@ -57,6 +61,7 @@ var controller = {
                // add marker to marker object array
                data.activeMarkers.push(this.marker);
                data.activeMarkerTitles.push(arrMarkers[loop].title);
+               addMarkerToList(arrMarkers[loop].title);
           }
      },
 
@@ -74,13 +79,13 @@ var controller = {
                     data.activeMarkers[loop].setMap(data.map);
                     //initiate marker bounce when adding to map
                     if (data.activeMarkers[loop].getAnimation() === 1 ) {
-
                          //already bouncing
                     } else {
                          //Turn on Bounce
                          data.activeMarkers[loop].animation = google.maps.Animation.BOUNCE;
                     }
                } else {
+                    //remove marker from map
                     data.activeMarkers[loop].setMap(null);
                }
           }
@@ -98,6 +103,7 @@ var controller = {
 
      }),
 
+     // get Foursquare data for
      foursquareData: function(path, success, error) {
           var xhr = new XMLHttpRequest();
           xhr.onreadystatechange = function()
@@ -114,5 +120,10 @@ var controller = {
           };
           xhr.open("GET", path, true);
           xhr.send();
+     },
+
+     //add marker data to visibleMarkers for list displayed
+     addMarkerToList: function(title) {
+          this.title = title;
      }
 };

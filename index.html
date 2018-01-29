@@ -16,8 +16,6 @@
           #myMapWindow {
                height: 100%;
                width: 100%;
-               margin: 1em;
-               padding: 1em;
           }
           #floating-panel {
             position: fixed;
@@ -70,8 +68,8 @@
           }
           html, body {
                height: 100%;
-               margin: 1em;
-               padding: 1em;
+               margin: .5em;
+               padding: .5em;
           }
           @media screen and (max-height: 450px) {
             .sidenav {padding-top: 15px;}
@@ -95,6 +93,15 @@
      <div id="myMapWindow">
           <div id="map">
           </div>
+          <div id="list-side">
+          </div>
+     </div>
+     <div id="list-below">
+          <ul data-bind="foreach: visibleMarkerList">
+               <li>
+                    <span data-bind="text: title"></span>
+               </li>
+          </ul>
      </div>
      <script>
           //control side navigation menu
@@ -115,9 +122,6 @@
      <script src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
      <script src="model-views/mv-index.js" onerror="error loading('model-views/mv-index.js')"></script>
      <script async src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
-     <script>
-
-     </script>
      <!-- script required for loading google maps API -->
      <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"

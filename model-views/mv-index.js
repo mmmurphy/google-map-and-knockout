@@ -27,6 +27,9 @@ var data = {
      // used to store an array of marker titles only.  This set will be used for the marker drobdown filter
      activeMarkerTitles: ko.observableArray([]),
 
+     // used to store visible marker list
+     visibleMarkerList: ko.observableArray([]),
+
      // Header title text
      pageHeader: {
           main: 'Elon, NC 27244',
