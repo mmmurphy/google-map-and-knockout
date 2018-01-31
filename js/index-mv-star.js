@@ -42,6 +42,7 @@ var controller = {
           // parse marker string to JSON format using Knockout API
           var arrMarkers = ko.utils.parseJson(jsonMarkers);
           var loopStop = arrMarkers.length;
+          var infoWindowContentString = '';
 
           //clear markers of data before adding to arrays
           data.activeMarkers = [];
@@ -49,21 +50,45 @@ var controller = {
 
           // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
-               //add marker object to activeMarkers array
+               //create marker object
                this.marker = new google.maps.Marker({
                     position: arrMarkers[loop].position,
                     map: data.map,
                     title: arrMarkers[loop].title,
                     visible:  true,
                     animation: google.maps.Animation.DROP,
-                    icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (loop + 1) + '|FF9900'
+                    //icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (loop + 1) + '|FF9900'
                     //label: '' + (loop + 1)
                });
+
+               // create HTML content string for google.maps.InfoWindow
+               infoWindowContentString = '<p>' + arrMarkers[loop].title + '</p><p>' + arrMarkers[loop].type + '</p>';
+               console.log(infoWindowContentString);
+               // create InfoWindow object
+                 var infoWindow = new google.maps.InfoWindow({
+                    position: arrMarkers[loop].position,
+                    content: infoWindowContentString
+               });
+
+               // create a listener for the Marker
+//               this.marker.addListener('click', function() {
+//                    console.log('marker was clicked for ' + this.marker);
+//                    infoWindow.open(data.map, this.marker);
+//               });
+//               console.log('set listener for ' + arrMarkers[loop].title);
+               var marker = this.marker;
                // add marker to marker object array
                data.activeMarkers.push(this.marker);
+               console.log('marker created for ' + data.activeMarkers[loop].title);
+               // create a listener for the Marker
+               data.activeMarkers[loop].addListener('click', function() {
+                    console.log('marker was clicked for ' + marker.title);
+                    infoWindow.open(data.map, data.activeMarkers[loop]);
+               });
                data.activeMarkerTitles.push({'title': arrMarkers[loop].title});
                data.visibleMarkerList.push({'title': arrMarkers[loop].title, 'number': loop + 1});
           }
+
      },
 
      // use filter string to hide mMarkers from map

@@ -12,17 +12,19 @@ The user interface creates an initial display of the Google map with location ma
 * CSS Side Menu with navigation buttons
 * Navigation menu accessed via the hamburger icon
 * From the navigation menu, selecting a marker category button or single marker in the dropdown will animate and make visible any marker matching the selected search filter
+* The textual list of the visible markers are updated in coordination with marker filters via knockout binding
 
 ### Google Maps API
 * Marker locations are defined as an array
 * Markers drop on the map upon initialization
 * Bouncy Markers - Google API marker labels DO NOT BOUNCE with the markers within the Google Maps API. To overcome this, I used the Google chart API to set the marker icon property as follows.  The label property remains null.
    icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (loop + 1) + '|FF9900'
-* Attempting to set BOUNCE annimation on an already bouncing marker has a toggle effect and turns off the marker animation.  To bypass this effect, I used the Google API function marker.getAnimation() === 1 in advance to either leave the marker bouncing or turn on the state if the marker is not animated.
+* Attempting to set BOUNCE annimation on an already bouncing marker has a toggle effect and turns off the marker animation.  To bypass this effect, I used the Google API function marker.getAnimation() === 1 in advance to either leave the marker bouncing or turn on the state if the marker is not animated
 
 ### knockout
 * Parsed JSON data strings of initial data for the marker locations
 * Monitor dropdown button for a change in the selection
+* Altering the visibleMarkerList array must be accomplished with the Knockout.js .removeAll() function; clearing the array with javascript value assignment will not let Knockout.js know the array has been modified and consequently will not update the binding to the view
 
 ### Foursquare API
 

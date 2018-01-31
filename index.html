@@ -22,6 +22,15 @@
                line-height: 20px;
                max-width: 44%;
           }
+          #hamburger{
+               font-size: 36px;
+          }
+          #mainPageHeader{
+               display: inline-block;
+               right: .5em;
+               position: fixed;
+               margin-top: 0;
+          }
           #map {
                height: 100%;
                width: 100%;
@@ -74,6 +83,9 @@
           li {
                list-style-type: none;
           }
+          ul {
+               padding: 0;
+          }
           @media screen and (max-height: 450px) {
                .sidenav {padding-top: 15px;}
                .sidenav a {font-size: 18px;}
@@ -86,10 +98,10 @@
 </head>
 <body id="body">
      <div id="mySidenav" class="sidenav">
-
-</div>
+     </div>
      <div>
-          <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; <h1 id="mainPageHeader"></h1></span>
+          <span id="hamburger" onclick="openNav()">&#9776;</span>
+          <h1 id="mainPageHeader"></h1>
           <h4 id="subPageHeader"></h4>
           <h4 id="loadError"></h4>
      </div>
