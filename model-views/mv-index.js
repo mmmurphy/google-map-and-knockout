@@ -12,10 +12,10 @@ var data = {
           '{"title": "Fonville Fountain", "position": {"lat": 36.10201, "lng": -79.504}, "type": "Landmark"}, ' +
           '{"title": "Irazu Coffee", "position": {"lat": 36.10521, "lng": -79.505}, "type": "Resturaunt"}, ' +
           '{"title": "Steve Wosniak", "position": {"lat": 36.1038, "lng": -79.506}, "type": "Event"}, ' +
-          '{"title": "Simply Thai", "position": {"lat": 36.102721, "lng": -795145798}, "type": "Resturaunt", "fsID": "4b5e1cedf964a520527e29e3"}]',
+          '{"title": "Simply Thai", "position": {"lat": 36.1025, "lng": -79.5145}, "type": "Resturaunt", "fsID": "4b5e1cedf964a520527e29e3"}]',
 
      // Map variables for centering and the Zoom level
-     mapCenter: {lat: 36.1013906, lng: -79.5067275},
+     mapCenter: {lat: 36.103, lng: -79.509},
      mapDefaultZoom: 15,
 
      //used to store map marker objects
@@ -27,7 +27,7 @@ var data = {
      // used to store an array of marker titles only.  This set will be used for the marker drobdown filter
      activeMarkerTitles: ko.observableArray([]),
 
-     // used to store visible marker list
+     // used to store visible marker list fo use in <li>
      visibleMarkerList: ko.observableArray([]),
 
      // Header title text
@@ -65,6 +65,6 @@ var view = {
      displayFilterControls: function(filterHTML) {
           //document.getElementById('floating-panel').innerHTML = filterHTML;
           document.getElementById('mySidenav').innerHTML = filterHTML;
+     },
 
-     }
 };

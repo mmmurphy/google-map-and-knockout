@@ -24,16 +24,17 @@ var controller = {
           // add filter displayButtons
           view.displayFilterControls(data.filterButtons);
 
-          // Knockout.js framework implementation.  Must be executed last to implement defined bindings.
-          ko.options.useOnlyNativeEvents = true;
-          ko.applyBindings(view);
 
           // URL for ll search
           var fsURL="https://api.foursquare.com/v2/venues/explore/?client_id=2YOUP4JC4Z4S1BQ4USE5XIPHMUOWTCJUAWXJSPXTD2RC3S0N&client_secret=M1R2B2BQWUTASVJFDLNQ42ZQK4TMQNJVXYSO3G4OZ0J2QNXN&v=20180125&ll=36.101,-79.506&limit=20";
-          this.foursquareData(fsURL,
-               function(data) { console.log(data); },
-               function(xhr) { console.error(xhr); }
-          );
+//          this.foursquareData(fsURL,
+//               function(data) { console.log(data); },
+//               function(xhr) { console.error(xhr); }
+//          );
+
+          // Knockout.js framework implementation.  Must be executed last to implement defined bindings.
+          ko.options.useOnlyNativeEvents = true;
+          ko.applyBindings(view);
      },
 
      //initMarkers parses the jsonMarkers string and creates each marker object
@@ -44,7 +45,7 @@ var controller = {
 
           //clear markers of data before adding to arrays
           data.activeMarkers = [];
-          data.visibleMarkerList = [];
+          data.visibleMarkerList.removeAll();
 
           // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
@@ -60,8 +61,8 @@ var controller = {
                });
                // add marker to marker object array
                data.activeMarkers.push(this.marker);
-               data.activeMarkerTitles.push(arrMarkers[loop].title);
-               addMarkerToList(arrMarkers[loop].title);
+               data.activeMarkerTitles.push({'title': arrMarkers[loop].title});
+               data.visibleMarkerList.push({'title': arrMarkers[loop].title, 'number': loop + 1});
           }
      },
 
@@ -69,6 +70,11 @@ var controller = {
      //     setMap(null) to hide
      filterMarkers: function(filter) {
           var loopStop = data.activeMarkers.length;
+          // clear list view of Markers
+          console.log(data.visibleMarkerList);
+          // must use the knockout removeAll function vs JS array = [] to clear
+          data.visibleMarkerList.removeAll();
+          console.log(data.visibleMarkerList);
           // temporary array to hold non-google API location properties
           var arrMarkers = ko.utils.parseJson(data.mapMarkersJSON);
           // loop through markers and add or remove from active map
@@ -77,6 +83,8 @@ var controller = {
                if (arrMarkers[loop].type == filter || filter == "All" || arrMarkers[loop].title == filter) {
                     // add marker to map.  This must come first as the function resets animation
                     data.activeMarkers[loop].setMap(data.map);
+                    // add marker title to list view
+                    data.visibleMarkerList.push({'title': arrMarkers[loop].title, 'number': loop + 1});
                     //initiate marker bounce when adding to map
                     if (data.activeMarkers[loop].getAnimation() === 1 ) {
                          //already bouncing
@@ -89,6 +97,7 @@ var controller = {
                     data.activeMarkers[loop].setMap(null);
                }
           }
+          console.log(data.visibleMarkerList);
      },
 
      // called when select item is defined.  No need for action in this implementation
@@ -122,8 +131,4 @@ var controller = {
           xhr.send();
      },
 
-     //add marker data to visibleMarkers for list displayed
-     addMarkerToList: function(title) {
-          this.title = title;
-     }
 };
