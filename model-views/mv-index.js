@@ -9,9 +9,9 @@ var data = {
      mapMarkersJSON: '[' +
           '{"title": "Pandoras Pies", "position": {"lat": 36.1014897, "lng": -79.50681}, "type": "Resturaunt", "fsID": "4f0f20e7e4b050cad0ee9282"}, ' +
           '{"title": "The Root", "position": {"lat": 36.1007668, "lng": -79.5073888}, "type": "Resturaunt", "fsID": "4ddbb641fa7637ab73e0949d"}, ' +
-          '{"title": "Fonville Fountain", "position": {"lat": 36.10201, "lng": -79.504}, "type": "Landmark"}, ' +
-          '{"title": "Irazu Coffee", "position": {"lat": 36.10521, "lng": -79.505}, "type": "Resturaunt"}, ' +
-          '{"title": "Steve Wosniak", "position": {"lat": 36.1038, "lng": -79.506}, "type": "Event"}, ' +
+          '{"title": "Fonville Fountain", "position": {"lat": 36.10201, "lng": -79.504}, "type": "Landmark", "fsID": ""}, ' +
+          '{"title": "Irazu Coffee", "position": {"lat": 36.10521, "lng": -79.505}, "type": "Resturaunt", "fsID": ""}, ' +
+          '{"title": "Steve Wosniak", "position": {"lat": 36.1038, "lng": -79.506}, "type": "Event", "fsID": ""}, ' +
           '{"title": "Simply Thai", "position": {"lat": 36.1025, "lng": -79.5145}, "type": "Resturaunt", "fsID": "4b5e1cedf964a520527e29e3"}]',
 
      // Map variables for centering and the Zoom level
@@ -19,7 +19,7 @@ var data = {
      mapDefaultZoom: 15,
 
      //used to store map marker objects
-     activeMarkers: ko.observableArray([]),
+     activeMarkers: ko.observableArray(),
 
      // holds dropdown list selectedMarker
      selectedMarker: ko.observable(),

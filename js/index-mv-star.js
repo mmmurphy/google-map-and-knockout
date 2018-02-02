@@ -5,21 +5,18 @@
 var controller = {
      // init is executed by the callback for the google maps API URL in the HTML file
      init: function() {
+          //initialize markers before creating
+          data.activeMarkers = [];
+
           // display page header information
           view.header(data.pageHeader.main, data.pageHeader.sub);
 
           closeNav();
 
-          // display map area
-          data.map = new google.maps.Map(document.getElementById('map'), {
-                         center: data.mapCenter,
-                         zoom: data.mapDefaultZoom,
-                         mapTypeId: 'terrain',
-                         mapTypeControlStyle: 'dropdown_menu'
-          });
+          this.createMap();
 
           // add markers to map
-          this.initMarkers(data.map, data.mapMarkersJSON);
+          this.initMarkers();
 
           // add filter displayButtons
           view.displayFilterControls(data.filterButtons);
@@ -37,21 +34,33 @@ var controller = {
           ko.applyBindings(view);
      },
 
-     //initMarkers parses the jsonMarkers string and creates each marker object
-     initMarkers: function(mapRef, jsonMarkers) {
-          // parse marker string to JSON format using Knockout API
-          var arrMarkers = ko.utils.parseJson(jsonMarkers);
-          var loopStop = arrMarkers.length;
-          var infoWindowContentString = '';
+     //temp create map
+     createMap: function() {
+          // display map area
+          data.map = new google.maps.Map(document.getElementById('map'), {
+               center: data.mapCenter,
+               zoom: data.mapDefaultZoom,
+               mapTypeId: 'terrain',
+               mapTypeControlStyle: 'dropdown_menu'
+          });
 
-          //clear markers of data before adding to arrays
-          data.activeMarkers = [];
-          data.visibleMarkerList.removeAll();
+          var trafficLayer = new google.maps.TrafficLayer();
+          trafficLayer.setMap(data.map);
+     },
+
+     //initMarkers parses the jsonMarkers string and creates each marker object
+     initMarkers: function() {
+          // parse marker string to JSON format using Knockout API
+          var arrMarkers = ko.utils.parseJson(data.mapMarkersJSON);
+          var loopStop = arrMarkers.length;
+          var infoWindowContentString, infoWindow, marker, stringLoop;
+
+          //data.visibleMarkerList.removeAll();
 
           // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
                //create marker object
-               this.marker = new google.maps.Marker({
+               marker = new google.maps.Marker({
                     position: arrMarkers[loop].position,
                     map: data.map,
                     title: arrMarkers[loop].title,
@@ -61,32 +70,27 @@ var controller = {
                     //label: '' + (loop + 1)
                });
 
-               // create HTML content string for google.maps.InfoWindow
-               infoWindowContentString = '<p>' + arrMarkers[loop].title + '</p><p>' + arrMarkers[loop].type + '</p>';
-               console.log(infoWindowContentString);
-               // create InfoWindow object
-                 var infoWindow = new google.maps.InfoWindow({
-                    position: arrMarkers[loop].position,
-                    content: infoWindowContentString
+               // add marker to marker object array
+               data.activeMarkers.push(marker);
+               // add click event listener to create marker infoWindow
+               // http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/
+               google.maps.event.addListener(data.activeMarkers[loop], 'click', function() {
+                    // create HTML content string for google.maps.InfoWindow
+                    infoWindowContentString =  '<div class="iwContainer"><div class="iwTitle"><p>' + this.title + '</p></div></div>';
+
+                    // create InfoWindow object
+                    infoWindow = new google.maps.InfoWindow({
+                         content: infoWindowContentString
+                    });
+                    // open the InfoWinto
+                    infoWindow.open(data.map, this);
                });
 
+
+//               console.log('marker created for ' + data.activeMarkers[loop].title);
                // create a listener for the Marker
-//               this.marker.addListener('click', function() {
-//                    console.log('marker was clicked for ' + this.marker);
-//                    infoWindow.open(data.map, this.marker);
-//               });
-//               console.log('set listener for ' + arrMarkers[loop].title);
-               var marker = this.marker;
-               // add marker to marker object array
-               data.activeMarkers.push(this.marker);
-               console.log('marker created for ' + data.activeMarkers[loop].title);
-               // create a listener for the Marker
-               data.activeMarkers[loop].addListener('click', function() {
-                    console.log('marker was clicked for ' + marker.title);
-                    infoWindow.open(data.map, data.activeMarkers[loop]);
-               });
-               data.activeMarkerTitles.push({'title': arrMarkers[loop].title});
-               data.visibleMarkerList.push({'title': arrMarkers[loop].title, 'number': loop + 1});
+               data.activeMarkerTitles.push({'title': marker.title});
+               data.visibleMarkerList.push({'title': marker.title, 'number': loop + 1});
           }
 
      },
@@ -96,10 +100,10 @@ var controller = {
      filterMarkers: function(filter) {
           var loopStop = data.activeMarkers.length;
           // clear list view of Markers
-          console.log(data.visibleMarkerList);
+//          console.log(data.visibleMarkerList);
           // must use the knockout removeAll function vs JS array = [] to clear
           data.visibleMarkerList.removeAll();
-          console.log(data.visibleMarkerList);
+//          console.log(data.visibleMarkerList);
           // temporary array to hold non-google API location properties
           var arrMarkers = ko.utils.parseJson(data.mapMarkersJSON);
           // loop through markers and add or remove from active map
@@ -122,7 +126,7 @@ var controller = {
                     data.activeMarkers[loop].setMap(null);
                }
           }
-          console.log(data.visibleMarkerList);
+//          console.log(data.visibleMarkerList);
      },
 
      // called when select item is defined.  No need for action in this implementation

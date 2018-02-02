@@ -20,6 +20,7 @@ The user interface creates an initial display of the Google map with location ma
 * Bouncy Markers - Google API marker labels DO NOT BOUNCE with the markers within the Google Maps API. To overcome this, I used the Google chart API to set the marker icon property as follows.  The label property remains null.
    icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + (loop + 1) + '|FF9900'
 * Attempting to set BOUNCE annimation on an already bouncing marker has a toggle effect and turns off the marker animation.  To bypass this effect, I used the Google API function marker.getAnimation() === 1 in advance to either leave the marker bouncing or turn on the state if the marker is not animated
+* infoWindow was popping up on the 6th marker no matter what marker I selected.  According to a post at http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/ , the issue is to do with Javascript memory handling.  Following the guidlines in the post, I was able to overcome the issue.  The site also shows a method to center a map based on the marker locations.  I had already determined my center so I didn't add this code.
 
 ### knockout
 * Parsed JSON data strings of initial data for the marker locations
