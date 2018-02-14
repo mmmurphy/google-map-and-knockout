@@ -79,6 +79,9 @@
           .iwTitle {
 
           }
+          .li-details {
+/*               display: none;*/
+          }
           html, body {
                height: 100%;
                margin: .5em;
@@ -89,6 +92,11 @@
           }
           li {
                list-style-type: none;
+          }
+          li:hover {
+               background-color: #aaa;
+               font-style: italic;
+               font-weight: bold;
           }
           ul {
                padding: 0;
@@ -121,8 +129,12 @@
      <div id="list-below">
           <ul data-bind="foreach: data.visibleMarkerList">
                <li>
-                    <div>
-                         <span data-bind="text: number"></span><span>&emsp;</span><span data-bind="text: title"></span>
+                    <div data-bind="attr: {'id': 'li-' + number}">
+                         <span data-bind="text: number, event: {onclick: 'controller.listItemExpand(number)'}"></span><span>&emsp;</span><span data-bind="text: title, event: {onclick: 'controller.listItemExpand(number)'}"></span>
+                         <div class="li-details" data-bind="attr: {'id': 'detail-' + number}">
+                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: fsCategory"></span><span>&emsp;</span><span data-bind="text: fsAddress"></span>
+                              <p data-bind="text: fsAddress"></p>
+                         </div>
                     </div>
                </li>
           </ul>

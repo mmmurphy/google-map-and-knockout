@@ -21,14 +21,6 @@ var controller = {
           // add filter displayButtons
           view.displayFilterControls(data.filterButtons);
 
-
-          // URL for ll search
-     //     var fsURL="https://api.foursquare.com/v2/venues/explore/?client_id=2YOUP4JC4Z4S1BQ4USE5XIPHMUOWTCJUAWXJSPXTD2RC3S0N&client_secret=M1R2B2BQWUTASVJFDLNQ42ZQK4TMQNJVXYSO3G4OZ0J2QNXN&v=20180125&ll=36.101,-79.506&limit=20";
-//          this.foursquareData(fsURL,
-//               function(data) { console.log(data); },
-//               function(xhr) { console.error(xhr); }
-//          );
-
           // Knockout.js framework implementation.  Must be executed last to implement defined bindings.
           ko.options.useOnlyNativeEvents = true;
           ko.applyBindings(view);
@@ -53,23 +45,13 @@ var controller = {
           // parse marker string to JSON format using Knockout API
           var arrMarkers = ko.utils.parseJson(data.mapMarkersJSON);
           var loopStop = arrMarkers.length;
-          var infoWindowContentString, infoWindow, marker, stringLoop, strFsqURL, arrFsq, fourSqData = [], fsSuccess, fsError;
-
-          //data.visibleMarkerList.removeAll();
+          var infoWindowContentString, infoWindow, marker, stringLoop,
+               strFsqURL, arrFsq, fourSqData, fsSuccess, fsError;
 
           // loop through the marksers and create a new marker for each one
           for (loop = 0; loop < loopStop; loop++) {
-               // get foursquare data for marker
-               // need to catch meta.code 40x and display meta.errorType and/or meta.errorDetail
-               if (arrMarkers[loop].fsID === undefined) {
-                    console.log('No Foursquare ID for ' + arrMarkers[loop].title);
-               } else {
-                    console.log('Getting Foursquare data for ' + arrMarkers[loop].title);
-                    strFsqURL = data.fsAPIBaseURL.replace('%replace%', arrMarkers[loop].fsID);
-                    this.foursquareData(strFsqURL, fsSuccess, fsError);
-               }
 
-               //create marker object
+               //create marker object with default values
                marker = new google.maps.Marker({
                     position: arrMarkers[loop].position,
                     map: data.map,
@@ -80,33 +62,63 @@ var controller = {
                     fsCategory: arrMarkers[loop].type,
                     fsName: '',
                     fsID: arrMarkers[loop].fsID,
-                    fsPhone: 'No match in Foursquare data',
+                    fsPhone: 'No listing in Foursquare',
                     fsAddress: '',
                     fsUrl: '#',
-                    fsRating: ''
+                    fsRating: '',
+                    localId: (loop + 1)
                });
 
                // add marker to marker object array
                data.activeMarkers.push(marker);
+
+               // get foursquare data for marker
+               // need to catch meta.code 40x and display meta.errorType and/or meta.errorDetail
+               if (arrMarkers[loop].fsID === undefined) {
+//                    console.log('No Foursquare ID for ' + arrMarkers[loop].title);
+               } else {
+//                    console.log('Getting Foursquare data for ' + arrMarkers[loop].title);
+                    strFsqURL = data.fsAPIBaseURL.replace('%replace%', arrMarkers[loop].fsID);
+                    this.foursquareData(loop, strFsqURL, fsSuccess, fsError);
+               }
+
+
+
+
                // add click event listener to create marker infoWindow
                // http://you.arenot.me/2010/06/29/google-maps-api-v3-0-multiple-markers-multiple-infowindows/
                google.maps.event.addListener(data.activeMarkers[loop], 'click', function() {
                     // create HTML content string for google.maps.InfoWindow
                     infoWindowContentString =  '<div><div class="iwTitle"><pre>' +
-                         this.title + '\t'+ this.fsCategory + '\t'+ (this.fsRating * 10) + '%</pre><p>'+ this.fsPhone + '</p><p>'+ this.fsAddress + '</p><a href="' + this.fsUrl +'"></a></div></div>';
+                         this.title + '\t'+ this.fsCategory + '\t'+ (this.fsRating * 10) + '%</pre><p>'+ this.fsPhone + '</p><p>'+ this.fsAddress + '</p><a href="' + this.fsUrl +'">Foursquare site</a></div></div>';
+
+                         // expand the text listing
+                         controller.listItemExpand(this.loop);
 
                     // create InfoWindow object
                     infoWindow = new google.maps.InfoWindow({
                          content: infoWindowContentString
                     });
+
+
                     // open the InfoWinto
                     infoWindow.open(data.map, this);
                });
 
                // create a listener for the Marker
                data.activeMarkerTitles.push({'title': marker.title});
-               data.visibleMarkerList.push({'title': marker.title, 'number': loop + 1});
+               console.log('Title = ' + marker.title);
+               console.log('Catgegory = ' + marker.fsCategory);
+               console.log('Address = ' + marker.fsAddress);
+               console.log('Rating = ' + marker.fsRating);
+
+               data.visibleMarkerList.push({'title': marker.title,
+                                             'fsCategory': marker.fsCategory,
+                                             'fsAddress': marker.fsAddress,
+                                             'fsRating': marker.fsRating,
+                                             'number': loop + 1});
           }
+
 
      },
 
@@ -127,7 +139,11 @@ var controller = {
                     // add marker to map.  This must come first as the function resets animation
                     data.activeMarkers[loop].setMap(data.map);
                     // add marker title to list view
-                    data.visibleMarkerList.push({'title': arrMarkers[loop].title, 'number': loop + 1});
+                    data.visibleMarkerList.push({'title': arrMarkers[loop].title,
+                                                  'number': loop + 1,
+                                                  'fsCategory': arrMarkers[loop].fsCategory,
+                                                  'fsAddress': arrMarkers[loop].fsAddress,
+                                                  'fsRating': arrMarkers[loop].fsRating});
                     //initiate marker bounce when adding to map
                     if (data.activeMarkers[loop].getAnimation() === 1 ) {
                          //already bouncing
@@ -155,7 +171,7 @@ var controller = {
      }),
 
      // AJAX function to get Foursquare data for a marker
-     foursquareData: function(path, success, error) {
+     foursquareData: function(int, path, success, error) {
           var xhr = new XMLHttpRequest();
           var fsJson, loopStop;
           var fsReturnData = ko.observableArray([]);
@@ -168,34 +184,20 @@ var controller = {
                          fsJson = ko.utils.parseJson(xhr.responseText);
 
                          // locate marker to add Foursquare fourSqData
-                         loopStop = data.activeMarkers.length;
-                         for (int = 0; int < loopStop; int++) {
+                         //loopStop = data.activeMarkers.length;
+                         //for (int = 0; int < loopStop; int++) {
                               if (fsJson.response.venue.id === data.activeMarkers[int].fsID){
                                    data.activeMarkers[int].fsCategory = fsJson.response.venue.categories[0].shortName;
                                    data.activeMarkers[int].fsPhone = fsJson.response.venue.contact.formattedPhone;
                                    data.activeMarkers[int].fsAddress = fsJson.response.venue.location.formattedAddress;
                                    data.activeMarkers[int].fsUrl = fsJson.response.venue.canonicalUrl;
                                    data.activeMarkers[int].fsRating = fsJson.response.venue.rating;
-                              } else {}
-                         }
-/*                         fsReturnData.id = fsJson.response.venue.id;
-                         fsReturnData.code = fsJson.meta.code;
-                         fsReturnData.name = fsJson.response.venue.name;
-                         fsReturnData.formattedPhone = fsJson.response.venue.contact.formattedPhone;
-//                         console.log(fsJson.response.venue.location.formattedAddress);
-                         fsReturnData.formattedAddress = fsJson.response.venue.location.formattedAddress;
-                         fsReturnData.canonicalUrl = fsJson.response.venue.canonicalUrl;
-                         fsReturnData.category = fsJson.response.venue.categories[0].shortName;
-                         fsReturnData.rating = fsJson.response.venue.rating;
-*//*                         var int = fsReturnData.length - 1;
-                         if (int < 1) {
-                              console.log('ERROR: Foursquare data not pushed into data.arrFoursquareData')
-                         } else {
-                              console.log(data.arrFoursquareData.length + ' vs. ' + int);
-                    //          console.log('meta is ' data.arrFoursquareData[int].meta);
-*/                              console.log('Fousquare data retrieved for... ' + fsReturnData.name + ' at the address of... ' + fsReturnData.formattedAddress);
-                         return(fsReturnData);
-//                         }
+                              } else {console.log('There is an error with what marker the Foursqare data is for');}
+                         //}
+                         console.log('activeMarkers em: ' + int);
+                         console.log('Fousquare data retrieved for... ' + data.activeMarkers[int].title + ' at the address of... ' + data.activeMarkers[int].fsAddress);
+                         //return(fsReturnData);
+                         //return('goodbye==============');
                   } else {
                       if (error)
                          error(xhr);
@@ -207,4 +209,7 @@ var controller = {
           xhr.send();
      },
 
+     listItemExpand: function(input) {
+          console.log('Expanding List Item... ' + input);
+     }
 };
