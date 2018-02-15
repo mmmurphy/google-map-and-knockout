@@ -127,12 +127,14 @@
           </div>
      </div>
      <div id="list-below">
-          <ul data-bind="foreach: data.visibleMarkerList">
+          <ul data-bind="foreach: data.activeMarkers">
                <li>
                     <div data-bind="attr: {'id': 'li-' + number}">
                          <span data-bind="text: number, event: {onclick: 'controller.listItemExpand(number)'}"></span><span>&emsp;</span><span data-bind="text: title, event: {onclick: 'controller.listItemExpand(number)'}"></span>
                          <div class="li-details" data-bind="attr: {'id': 'detail-' + number}">
-                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: fsCategory"></span><span>&emsp;</span><span data-bind="text: fsAddress"></span>
+                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: fsAddress"></span><span data-bind="text: inputCategory"></span><span>&emsp;-&emsp;</span><span data-bind="text: fsCategory"></span>
+                              <span>&emsp;</span>
+
                               <p data-bind="text: fsAddress"></p>
                          </div>
                     </div>
