@@ -26,12 +26,6 @@ var data = {
      // holds dropdown list selectedMarker
      selectedMarker: ko.observable(),
 
-     // used to store an array of marker titles only.  This set will be used for the marker drobdown filter
-     //activeMarkerTitles: ko.observableArray(),
-
-     // used to store visible marker list fo use in <li>
-     //visibleMarkerList: ko.observableArray([]),
-
      // used to store data from the FoursquareAPI
      arrFoursquareData: ko.observableArray([]),
 
@@ -78,7 +72,7 @@ var view = {
      // Prefix is the ID Prefix
      // specific is the specific identifier to be combined with the prefix to specify the Id= values
      // toggle is the value to set the display: setting to none 'false' or remove the display: property (true)
-     detailVisibility (prefix, specific, toggle) {
+     detailVisibility(prefix, specific, toggle) {
           var detailId = prefix + specific;
           var liId = 'li-' + specific;
           // loop through other items to display the details of only the desired item

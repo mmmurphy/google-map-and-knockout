@@ -44,7 +44,7 @@
                width: 100%;
           }
           #loadError {
-               font-weight: 'bold';
+               font-weight: bold;
 
           }
           .sidenav {
@@ -110,10 +110,7 @@
                .sidenav a {font-size: 18px;}
           }
      </style>
-<!--     <link rel="stylesheet" href="css/bootstrap.min.css"> -->
-     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-     <!-- <link rel="stylesheet" media="screen and (min-width:500px)" href="over500.css"> -->
-     <!-- <link rel="stylesheet" media="print" href="print.css"> -->
+     <link defer rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body id="body">
      <div id="mySidenav" class="sidenav">
@@ -153,15 +150,14 @@
           function closeNav() {
                document.getElementById("mySidenav").style.width = "0";
           }
-     </script>
-     <script defer>
+
           function errorLoading(inputString) {
                document.getElementById('loadError').innerText = 'ERROR:  ' + inputString + ' did not load!';
           }
      </script>
      <!-- scripts for Knockout.js and MV* design  -->
      <script defer src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
-     <script defer src="model-views/mv-index.js" onerror="error loading('model-views/mv-index.js')"></script>
+     <script defer src="model-views/mv-index.js" onerror="errorLoading('model-views/mv-index.js')"></script>
      <script defer src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
      <!-- script required for loading google maps API -->
      <script defer

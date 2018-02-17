@@ -3,6 +3,10 @@
 ## Project Overview
 Develop a single-page application featuring a map of your neighborhood or a neighborhood you would like to visit. Then add additional functionality to this application, including: map markers to identify popular locations or places to visit, a search function to easily discover these locations, and a listview to support simple browsing of all locations. Then research and implement third-party APIs that provide additional information about each of these locations (such as StreetView images, Wikipedia articles, Yelp reviews, etc).
 
+* src directory contains the human readable pretty version of the html and js filters
+
+* dist directory contains the faster loading minified files
+
 ## My implementation
 The location displayed is downtown Elon, NC near the ELON university.  Predefined markers are for some of my favorite restaurants as well as a local scenic spot on campus and a place where I attended a speech given by co-founder of Apple, Steve Wosniak.
 

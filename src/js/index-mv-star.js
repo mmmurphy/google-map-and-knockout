@@ -207,7 +207,6 @@ var controller = {
                } else {
                     turnOnOff = false;
                }
-//               console.log('detailVisibility parameters... ' + loop + ' ... ' + turnOnOff);
                view.detailVisibility('detail-', loop + 1, turnOnOff);
           }
      },
