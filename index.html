@@ -80,7 +80,7 @@
 
           }
           .li-details {
-/*               display: none;*/
+               display: none;
           }
           html, body {
                height: 100%;
@@ -128,14 +128,13 @@
      </div>
      <div id="list-below">
           <ul data-bind="foreach: data.activeMarkers">
-               <li>
+               <li data-bind='if: listed'>
                     <div data-bind="attr: {'id': 'li-' + number}">
-                         <span data-bind="text: number, event: {onclick: 'controller.listItemExpand(number)'}"></span><span>&emsp;</span><span data-bind="text: title, event: {onclick: 'controller.listItemExpand(number)'}"></span>
-                         <div class="li-details" data-bind="attr: {'id': 'detail-' + number}">
-                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: fsAddress"></span><span data-bind="text: inputCategory"></span><span>&emsp;-&emsp;</span><span data-bind="text: fsCategory"></span>
-                              <span>&emsp;</span>
-
-                              <p data-bind="text: fsAddress"></p>
+                         <span data-bind="click: function($number) {controller.listItemExpand(number)}"><span data-bind="text: number"></span><span>&emsp;</span><span data-bind="text: title"></span><span>&emsp;-&emsp;</span><span data-bind="text: inputCategory"></span></span>
+                         <div class="li-details" data-bind="if: hasDetails, attr: {'id': 'detail-' + number}">
+                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Rating:&emsp;&emsp;</span><span data-bind="text: fsRating"></span>
+                              <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: inputCategory"></span><span>&emsp;-&emsp;</span><span data-bind="text: fsCategory"></span>
+                              <p><span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span><span data-bind="text: fsAddress"></span></p>
                          </div>
                     </div>
                </li>

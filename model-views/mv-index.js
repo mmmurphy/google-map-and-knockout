@@ -74,4 +74,33 @@ var view = {
           document.getElementById('mySidenav').innerHTML = filterHTML;
      },
 
+     // function sets the CSS property
+     // Prefix is the ID Prefix
+     // specific is the specific identifier to be combined with the prefix to specify the Id= values
+     // toggle is the value to set the display: setting to none 'false' or remove the display: property (true)
+     detailVisibility (prefix, specific, toggle) {
+          var detailId = prefix + specific;
+          var liId = 'li-' + specific;
+          // loop through other items to display the details of only the desired item
+          if (toggle) {
+               // highlight and expand item details
+               document.getElementById(detailId).style.display = 'block';
+               document.getElementById(detailId).style.background = '#aaa';
+               document.getElementById(detailId).style.fontStyle = 'italic';
+               document.getElementById(detailId).style.fontWeight = 'bold';
+               document.getElementById(liId).style.display = 'block';
+               document.getElementById(liId).style.background = '#aaa';
+               document.getElementById(liId).style.fontStyle = 'italic';
+               document.getElementById(liId).style.fontWeight = 'bold';
+          } else {
+               // return item to unselected state
+               document.getElementById(detailId).style.display = 'none';
+               document.getElementById(detailId).style.background = '#fff';
+               document.getElementById(detailId).style.fontStyle = 'normal';
+               document.getElementById(detailId).style.fontWeight = 'normal';
+               document.getElementById(liId).style.background = '#fff';
+               document.getElementById(liId).style.fontStyle = 'normal';
+               document.getElementById(liId).style.fontWeight = 'normal';
+          }
+     }
 };
