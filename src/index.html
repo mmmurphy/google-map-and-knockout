@@ -25,6 +25,9 @@
           #hamburger{
                font-size: 36px;
           }
+          #loadError {
+               font-weight: bold;
+          }
           #mainPageHeader{
                display: inline-block;
                right: .5em;
@@ -43,46 +46,6 @@
                height: 55%;
                width: 100%;
           }
-          #loadError {
-               font-weight: bold;
-
-          }
-          .sidenav {
-              height: 100%;
-              max-width: 175px;
-              position: fixed;
-              z-index: 1;
-              top: 0;
-              left: 0;
-              background-color: #111;
-              overflow-x: hidden;
-              transition: 0.5s;
-              padding-top: 60px;
-          }
-
-          .sidenav a {
-              padding: 8px 8px 8px 32px;
-              text-decoration: none;
-              font-size: 25px;
-              color: #818181;
-              display: block;
-              transition: 0.3s;
-          }
-
-          .sidenav a:hover {
-              color: #f1f1f1;
-          }
-
-          .sidenav .closebtn {
-              position: absolute;
-              top: 0;
-              right: 25px;
-              font-size: 36px;
-              margin-left: 50px;
-          }
-          .iwTitle {
-
-          }
           .li-details {
                display: none;
           }
@@ -97,11 +60,6 @@
           li {
                list-style-type: none;
           }
-          li:hover {
-               background-color: #aaa;
-               font-style: italic;
-               font-weight: bold;
-          }
           ul {
                padding: 0;
           }
@@ -110,7 +68,25 @@
                .sidenav a {font-size: 18px;}
           }
      </style>
-     <link defer rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+     <!-- noscript wrapper for below fold css in case defer script not supported by browser -->
+     <noscript>
+          <link rel="stylesheet" href='css/style.css'>
+     </noscript>
+     <link rel="stylesheet" href="css/w3.css">
+<!-- Script to provide data when tying to improve speed to load page
+            not necessary for page function .  Add  onload="measureCRP()" property to body tag to run -->
+<!--     <script>
+          function measureCRP() {
+               var t = window.performance.timing,
+                         interactive = t.domInteractive - t.domLoading,
+                         dcl = t.domContentLoadedEventStart - t.domLoading,
+                         complete = t.domComplete - t.domLoading;
+               var stats = document.createElement('p');
+                              stats.textContent = 'interactive: ' + interactive + 'ms, ' +
+                              'dcl: ' + dcl + 'ms, complete: ' + complete + 'ms';
+               document.body.appendChild(stats);
+          }
+     </script> -->
 </head>
 <body id="body">
      <div id="mySidenav" class="sidenav">
@@ -141,20 +117,10 @@
                </li>
           </ul>
      </div>
-     <script defer>
-          //control side navigation menu
-          function openNav() {
-               document.getElementById("mySidenav").style.width = "250px";
-          }
-
-          function closeNav() {
-               document.getElementById("mySidenav").style.width = "0";
-          }
-
-          function errorLoading(inputString) {
-               document.getElementById('loadError').innerText = 'ERROR:  ' + inputString + ' did not load!';
-          }
-     </script>
+     <!-- async used for defer-css in case the css can be loaded earlier -->
+     <script async src="js/defer-css.js" onerror="errorLoading('js/defer-css.js')"></script>
+     <!-- defer used as these scripts below all must be run in order due to program functional/api dependencies -->
+     <script defer src="js/sideNav.js" onerror="errorLoading('js/sideNav.js')"></script>
      <!-- scripts for Knockout.js and MV* design  -->
      <script defer src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
      <script defer src="model-views/mv-index.js" onerror="errorLoading('model-views/mv-index.js')"></script>
@@ -163,8 +129,6 @@
      <script defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"
           onerror="errorLoading('Google Maps API')" onabort="errorLoading('Google Maps API abort')">
-     </script>
-     <script>
      </script>
 </body>
 </html>

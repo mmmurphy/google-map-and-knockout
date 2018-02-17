@@ -1,4 +1,4 @@
-# google-map-and-knockout
+# Google Maps, Foursquare, and Knockout.js
 
 ## Project Overview
 Develop a single-page application featuring a map of your neighborhood or a neighborhood you would like to visit. Then add additional functionality to this application, including: map markers to identify popular locations or places to visit, a search function to easily discover these locations, and a listview to support simple browsing of all locations. Then research and implement third-party APIs that provide additional information about each of these locations (such as StreetView images, Wikipedia articles, Yelp reviews, etc).
@@ -45,6 +45,6 @@ The user interface creates an initial display of the Google map with location ma
 * Use AJAX program style to request URL
 
 
-### Error Handling
+### Javascript
 * all scripts are loaded with defer tag.  This causes the scripts to load in order after the page is rendered.
 * all scripts are called with an onerror property to display an error message to the user if the script or API cannot be loaded.

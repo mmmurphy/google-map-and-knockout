@@ -88,13 +88,16 @@ var view = {
                document.getElementById(liId).style.fontWeight = 'bold';
           } else {
                // return item to unselected state
-               document.getElementById(detailId).style.display = 'none';
-               document.getElementById(detailId).style.background = '#fff';
-               document.getElementById(detailId).style.fontStyle = 'normal';
-               document.getElementById(detailId).style.fontWeight = 'normal';
-               document.getElementById(liId).style.background = '#fff';
-               document.getElementById(liId).style.fontStyle = 'normal';
-               document.getElementById(liId).style.fontWeight = 'normal';
+               // check if null in case there are no expanded items
+               if (document.getElementById(detailId) !== null) {
+                    document.getElementById(detailId).style.display = 'none';
+                    document.getElementById(detailId).style.background = '#fff';
+                    document.getElementById(detailId).style.fontStyle = 'normal';
+                    document.getElementById(detailId).style.fontWeight = 'normal';
+                    document.getElementById(liId).style.background = '#fff';
+                    document.getElementById(liId).style.fontStyle = 'normal';
+                    document.getElementById(liId).style.fontWeight = 'normal';
+               }
           }
      }
 };
