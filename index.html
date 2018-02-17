@@ -43,6 +43,10 @@
                height: 55%;
                width: 100%;
           }
+          #loadError {
+               font-weight: 'bold';
+
+          }
           .sidenav {
               height: 100%;
               max-width: 175px;
@@ -140,7 +144,7 @@
                </li>
           </ul>
      </div>
-     <script>
+     <script defer>
           //control side navigation menu
           function openNav() {
                document.getElementById("mySidenav").style.width = "250px";
@@ -150,19 +154,19 @@
                document.getElementById("mySidenav").style.width = "0";
           }
      </script>
-     <script>
+     <script defer>
           function errorLoading(inputString) {
                document.getElementById('loadError').innerText = 'ERROR:  ' + inputString + ' did not load!';
           }
      </script>
      <!-- scripts for Knockout.js and MV* design  -->
-     <script src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
-     <script src="model-views/mv-index.js" onerror="error loading('model-views/mv-index.js')"></script>
-     <script async src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
+     <script defer src="js/knockout-3.5.0beta.js" onerror="errorLoading('js/knockout-3.5.0beta.js')"></script>
+     <script defer src="model-views/mv-index.js" onerror="error loading('model-views/mv-index.js')"></script>
+     <script defer src="js/index-mv-star.js" onerror="errorLoading('js/index-mv-star.js')"></script>
      <!-- script required for loading google maps API -->
-     <script async defer
+     <script defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAD-S_7e8K-1jCykxijImsOMFIcmJAdYBE&callback=controller.init"
-          onerror="errorLoading('Google Maps API onerror')" onabort="errorLoading('Google Maps API abort')">
+          onerror="errorLoading('Google Maps API')" onabort="errorLoading('Google Maps API abort')">
      </script>
      <script>
      </script>
