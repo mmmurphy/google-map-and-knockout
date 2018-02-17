@@ -42,3 +42,5 @@ The user interface creates an initial display of the Google map with location ma
 
 
 ### Error Handling
+* all scripts are loaded with defer tag.  This causes the scripts to load in order after the page is rendered.
+* all scripts are called with an onerror property to display an error message to the user if the script or API cannot be loaded.
