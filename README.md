@@ -7,6 +7,10 @@ Develop a single-page application featuring a map of your neighborhood or a neig
 
 * dist directory contains the faster loading minified files
 
+## Application Screenshot
+
+![alt text](.\images\app-screenshot.png "application screenshot showing use")
+
 ## My implementation
 The location displayed is downtown Elon, NC near the ELON university.  Predefined markers are for some of my favorite restaurants as well as a local scenic spot on campus and a place where I attended a speech given by co-founder of Apple, Steve Wosniak.
 
